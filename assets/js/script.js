@@ -134,7 +134,40 @@ for (let i = 0; i < formInputs.length; i++) {
   });
 }
 
+(function() {
+  emailjs.init("rwpmNHFZvW8PRTnTB"); // replace with your actual public key
+})();
 
+const formFeedback = document.getElementById("form-feedback");
+
+// Enable the submit button when all fields are valid
+formInputs.forEach(input => {
+input.addEventListener("input", () => {
+  if (form.checkValidity()) {
+    formBtn.removeAttribute("disabled");
+  } else {
+    formBtn.setAttribute("disabled", "");
+  }
+});
+});
+
+// Handle form submission
+form.addEventListener("submit", function (e) {
+e.preventDefault();
+
+emailjs.sendForm("service_xnjsgso", "template_flhsymk", this)
+  .then(() => {
+    formFeedback.textContent = "Message sent successfully!";
+    formFeedback.style.color = "green";
+    form.reset();
+    formBtn.setAttribute("disabled", ""); // Disable the button after submission
+  })
+  .catch(error => {
+    console.error("Failed to send message:", error);
+    formFeedback.textContent = "Failed to send message. Please try again later.";
+    formFeedback.style.color = "red";
+  });
+});
 
 // page navigation variables
 const navigationLinks = document.querySelectorAll("[data-nav-link]");
